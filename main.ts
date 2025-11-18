@@ -21,11 +21,13 @@ function comprar_producto (nombre: string, precio: number, cantidad_dada: number
     cantidad_pedida = game.askForNumber("Cuanto quieres comprar?")
     precio_final = Math.round(precio / cantidad_dada)
     precio_final = precio_final * cantidad_pedida
-    if (info.score() - precio_final > 0) {
+    if (info.score() - precio_final >= 0 && (i == 4 || cantidad_pedida == Math.round(cantidad_pedida)) && cantidad_pedida > 0) {
         info.setScore(info.score() - precio_final)
         cantidad_productos[i] = cantidad_productos[i] + cantidad_pedida
-    } else {
+    } else if (i == 4 || cantidad_pedida == Math.round(cantidad_pedida)) {
         game.showLongText("No tienes suficiente madera", DialogLayout.Bottom)
+    } else {
+        game.showLongText("No puedes comprar en negativo", DialogLayout.Bottom)
     }
 }
 function entrar_menu () {
@@ -59,7 +61,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Product, function (sprite, other
     } else if (jugador.overlapsWith(cabra)) {
         cabra.sayText(cantidad_productos[1])
         if (controller.A.isPressed()) {
-            comprar_producto("Cabra", 12, 1, 1)
+            comprar_producto("Cabra", 5, 1, 1)
         }
     } else if (jugador.overlapsWith(gallina)) {
         gallina.sayText(cantidad_productos[2])
@@ -105,12 +107,12 @@ let arbol: Sprite = null
 let ordenador: Sprite = null
 let jugador: Sprite = null
 let cantidad_productos: number[] = []
-let precio_final22 = 0
-let cantidad_pedida22 = 0
-let texto22 = ""
-let texto2 = ""
-let cantidad_pedida2 = 0
 let precio_final2 = 0
+let cantidad_pedida2 = 0
+let texto2 = ""
+let texto22 = ""
+let cantidad_pedida22 = 0
+let precio_final22 = 0
 cantidad_productos = [
 0,
 0,

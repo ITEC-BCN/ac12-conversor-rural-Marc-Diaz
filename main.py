@@ -16,17 +16,22 @@ def on_on_overlap(sprite2, otherSprite2):
 sprites.on_overlap(SpriteKind.player, SpriteKind.Objeto, on_on_overlap)
 
 def comprar_producto(nombre: str, precio: number, cantidad_dada: number, i: number):
-    global cantidad_productos
+    global texto, cantidad_pedida, precio_final
     texto = "" + nombre + " - " + ("" + str(precio))
     game.show_long_text(texto, DialogLayout.BOTTOM)
     cantidad_pedida = game.ask_for_number("Cuanto quieres comprar?")
     precio_final = Math.round(precio / cantidad_dada)
     precio_final = precio_final * cantidad_pedida
-    if info.score() - precio_final > 0:
+    if info.score() - precio_final >= 0 and (i == 4 or cantidad_pedida == Math.round(cantidad_pedida)) and cantidad_pedida > 0:
         info.set_score(info.score() - precio_final)
         cantidad_productos[i] = cantidad_productos[i] + cantidad_pedida
     else:
-        game.show_long_text("No tienes suficiente madera", DialogLayout.BOTTOM)
+        if i == 4 or cantidad_pedida == Math.round(cantidad_pedida):
+            game.show_long_text("No tienes suficiente madera", DialogLayout.BOTTOM)
+        elif cantidad_pedida <= 0:
+            game.show_long_text("No puedes comprar en negativo", DialogLayout.BOTTOM)
+        else:
+            game.show_long_text("No puedes comprar en decimales", DialogLayout.BOTTOM)
 def entrar_menu():
     global salir, gallina, huevo, patata, cabra, caballo
     pause(200)
@@ -44,41 +49,51 @@ def entrar_menu():
     gallina = sprites.create(assets.image("""
         Gallina
         """), SpriteKind.Product)
-    gallina.set_position(50, 20)
+    gallina.set_position(50, 40)
     huevo = sprites.create(assets.image("""
         huevo azul
         """), SpriteKind.Product)
-    huevo.set_position(50, 60)
+    huevo.set_position(50, 80)
     patata = sprites.create(assets.image("""
             patata by mich
             """),
         SpriteKind.Product)
-    patata.set_position(120, 20)
+    patata.set_position(120, 40)
     cabra = sprites.create(assets.image("""
             ft Michelle para Ray ❤️
             """),
         SpriteKind.Product)
-    cabra.set_position(120, 60)
+    cabra.set_position(120, 80)
     caballo = sprites.create(assets.image("""
         caballo
         """), SpriteKind.Product)
-    caballo.set_position(90, 90)
+    caballo.set_position(90, 100)
 
 def on_on_overlap2(sprite, otherSprite):
     pause(200)
     jugador.start_effect(effects.hearts, 100)
     if controller.A.is_pressed() and jugador.overlaps_with(salir):
         salir_menu()
-    elif controller.A.is_pressed() and jugador.overlaps_with(caballo):
-        comprar_producto("Caballo", 12, 1, 0)
-    elif controller.A.is_pressed() and jugador.overlaps_with(cabra):
-        comprar_producto("Cabra", 12, 1, 1)
-    elif controller.A.is_pressed() and jugador.overlaps_with(gallina):
-        comprar_producto("Gallina", 6, 1, 2)
-    elif controller.A.is_pressed() and jugador.overlaps_with(huevo):
-        comprar_producto("Huevo", 3, 12, 3)
-    elif controller.A.is_pressed() and jugador.overlaps_with(patata):
-        comprar_producto("Patata", 2, 1.5, 4)
+    elif jugador.overlaps_with(caballo):
+        caballo.say_text(cantidad_productos[0])
+        if controller.A.is_pressed():
+            comprar_producto("Caballo", 12, 1, 0)
+    elif jugador.overlaps_with(cabra):
+        cabra.say_text(cantidad_productos[1])
+        if controller.A.is_pressed():
+            comprar_producto("Cabra", 5, 1, 1)
+    elif jugador.overlaps_with(gallina):
+        gallina.say_text(cantidad_productos[2])
+        if controller.A.is_pressed():
+            comprar_producto("Gallina", 6, 1, 2)
+    elif jugador.overlaps_with(huevo):
+        huevo.say_text(cantidad_productos[3])
+        if controller.A.is_pressed():
+            comprar_producto("Huevo", 3, 12, 3)
+    elif jugador.overlaps_with(patata):
+        patata.say_text(cantidad_productos[4])
+        if controller.A.is_pressed():
+            comprar_producto("Patata", 2, 1.5, 4)
 sprites.on_overlap(SpriteKind.player, SpriteKind.Product, on_on_overlap2)
 
 def init():
@@ -114,6 +129,10 @@ texto = ""
 arbol: Sprite = None
 ordenador: Sprite = None
 jugador: Sprite = None
+cantidad_productos: List[number] = []
+precio_final22 = 0
+cantidad_pedida22 = 0
+texto22 = ""
 texto2 = ""
 cantidad_pedida2 = 0
 precio_final2 = 0
