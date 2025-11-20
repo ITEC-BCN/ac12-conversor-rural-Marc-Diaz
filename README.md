@@ -1,7 +1,7 @@
  
 
 
-> Open this page at [https://raimonizard.github.io/demo/](https://raimonizard.github.io/demo/)
+> Open this page at [[https://raimonizard.github.io/demo/](https://raimonizard.github.io/demo/)](https://arcade.makecode.com/S71418-70527-36489-99585)
 
 ## Use as Extension
 
